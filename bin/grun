@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# ANTLR CLI - grun Wrapper (TestRig) (#toolbyphichxivnuk - Easier to use)
+# Dung de test parser truc quan: grun <Grammar> <startRule> [-tokens|-tree|-gui]
+
+ANTLR_HOME="${ANTLR_HOME:-$HOME/antlr}"
+JAR_NAME="antlr-4.13.2-complete.jar"
+
+# Kiem tra co -helpantlr
+for arg in "$@"; do
+    if [[ "$arg" == "-helpantlr" || "$arg" == "--helpantlr" || "$arg" == "helpantlr" ]]; then
+        if command -v helpantlr >/dev/null 2>&1; then
+            exec helpantlr
+        else
+            DIR="$(cd "$(dirname "$0")" && pwd)"
+            exec "$DIR/helpantlr"
+        fi
+    fi
+done
+
+JAR_PATH="$ANTLR_HOME/$JAR_NAME"
+if [[ ! -f "$JAR_PATH" ]]; then
+    KIT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+    if [[ -f "$KIT_DIR/jar/$JAR_NAME" ]]; then
+        JAR_PATH="$KIT_DIR/jar/$JAR_NAME"
+    else
+        echo "[!] Khong tim thay $JAR_NAME tai $ANTLR_HOME"
+        echo "Vui long chay: bash install.sh de thiet lap ANTLR CLI."
+        exit 1
+    fi
+fi
+
+exec java -cp "$JAR_PATH:." org.antlr.v4.gui.TestRig "$@"

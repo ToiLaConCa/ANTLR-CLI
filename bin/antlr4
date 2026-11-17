@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# ANTLR CLI - antlr4 Wrapper (#toolbyphichxivnuk - Easier to use)
+# Dung de bien dich file .g4 sang Java / C++ / Python.
+
+ANTLR_HOME="${ANTLR_HOME:-$HOME/antlr}"
+JAR_NAME="antlr-4.13.2-complete.jar"
+
+# Kiem tra co -helpantlr
+for arg in "$@"; do
+    if [[ "$arg" == "-helpantlr" || "$arg" == "--helpantlr" || "$arg" == "helpantlr" ]]; then
+        if command -v helpantlr >/dev/null 2>&1; then
+            exec helpantlr
+        else
+            DIR="$(cd "$(dirname "$0")" && pwd)"
+            exec "$DIR/helpantlr"
+        fi
+    fi
+done
+
+if [[ ! -f "$ANTLR_HOME/$JAR_NAME" ]]; then
+    # Thu tim trong thu muc jar/ cua kit
+    KIT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+    if [[ -f "$KIT_DIR/jar/$JAR_NAME" ]]; then
+        ANTLR_HOME="$KIT_DIR/jar"
+    else
+        echo "[!] Khong tim thay $JAR_NAME tai $ANTLR_HOME"
+        echo "Vui long chay: bash install.sh de thiet lap ANTLR CLI."
+        exit 1
+    fi
+fi
+
+exec java -jar "$ANTLR_HOME/$JAR_NAME" "$@"

@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+# ANTLR CLI - Interactive Quickstart & Guide
+# Tag: #toolbyphichxivnuk | Easier to use ANTLR on Linux
+
+set -euo pipefail
+
+CYAN='\033[1;36m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+PURPLE='\033[1;35m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+
+show_banner() {
+cat << "EOF"
+  █████╗ ███╗   ██╗████████╗██╗     ██████╗      ██████╗██╗     ██╗
+ ██╔══██╗████╗  ██║╚══██╔══╝██║     ██╔══██╗    ██╔════╝██║     ██║
+ ███████║██╔██╗ ██║   ██║   ██║     ██████╔╝    ██║     ██║     ██║
+ ██╔══██║██║╚██╗██║   ██║   ██║     ██╔══██╗    ██║     ██║     ██║
+ ██║  ██║██║ ╚████║   ██║   ███████╗██║  ██║    ╚██████╗███████╗██║
+ ╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═╝     ╚═════╝╚══════╝╚═╝
+EOF
+printf "%b\n" "${GREEN}${BOLD}>> ANTLR CLI -- Easier to use ANTLR on Linux${NC}"
+printf "%b\n" "${PURPLE}${BOLD}>> Created with care by phichxi #toolbyphichxivnuk${NC}"
+echo "------------------------------------------------------------------"
+}
+
+create_example() {
+    local target_dir="${1:-.}"
+    local sample_file="$target_dir/Hello.g4"
+    if [[ -f "$sample_file" ]]; then
+        printf "%b\n" "${YELLOW}[!] File $sample_file da ton tai, khong ghi de.${NC}"
+        return 0
+    fi
+    cat << 'EOF' > "$sample_file"
+// Hello.g4 - ANTLR 4 Grammar Example (#toolbyphichxivnuk)
+grammar Hello;
+
+// Parser Rule (chu viet thuong):
+r : 'hello' ID ;
+
+// Lexer Rules (chu VIET HOA):
+ID : [a-zA-Z]+ ;
+WS : [ \t\r\n]+ -> skip ;
+EOF
+    printf "%b\n" "${GREEN}[OK] Da tao file mau: ${BOLD}$sample_file${NC}"
+    printf "Ban co the chay ngay:\n"
+    printf "%b\n" "  ${CYAN}antlr4 Hello.g4 && javac Hello*.java${NC}"
+    printf "%b\n" "  ${CYAN}grun Hello r -tokens${NC} (go 'hello world' roi an Enter va Ctrl+D)"
+}
+
+case "${1:-}" in
+    --example|-e)
+        show_banner
+        create_example "${2:-.}"
+        exit 0
+        ;;
+    --version|-v)
+        echo "ANTLR CLI v2.0 (ANTLR 4.13.2) #toolbyphichxivnuk - Easier to use"
+        exit 0
+        ;;
+esac
+
+show_banner
+
+printf "%b\n" "${BOLD}HUONG DAN SU DUNG ANTLR CLI TU A-Z (DANG DE HIEU CHO NGUOI MOI):${NC}
+
+${CYAN}${BOLD}[BUOC 1] Tao file Ngu phap (.g4) bang nano${NC}
+  Mo trinh soan thao nano:
+    ${YELLOW}nano Hello.g4${NC}
+
+  Dan noi dung ngu phap co ban sau vao file:
+  -------------------------------------------------------------
+  grammar Hello;
+
+  r  : 'hello' ID ;          // Luat phan tich cu phap (Parser)
+  ID : [a-zA-Z]+ ;           // Luat phan tich tu vung (Lexer)
+  WS : [ \\t\\r\\n]+ -> skip ;  // Bo qua khoang trang va xuong dong
+  -------------------------------------------------------------
+  (Nhan ${BOLD}Ctrl + O${NC} roi ${BOLD}Enter${NC} de Luu; Nhan ${BOLD}Ctrl + X${NC} de Thoat nano)
+
+  ${PURPLE}* Meo nhanh:${NC} Go ${GREEN}helpantlr --example${NC} de tu dong tao file Hello.g4 mau!
+
+${CYAN}${BOLD}[BUOC 2] Bien dich file .g4 thanh ma nguon${NC}
+  * Danh cho Java (Mac dinh):
+    ${YELLOW}antlr4 Hello.g4${NC}
+    (He thong se tu dong sinh ra cac file: HelloLexer.java, HelloParser.java...)
+
+  * Danh cho C++:
+    ${YELLOW}antlr4 -Dlanguage=Cpp Hello.g4${NC}
+
+${CYAN}${BOLD}[BUOC 3] Bien dich code Java sinh ra bang javac${NC}
+  Chay lenh javac de bien dich tat ca cac file Java:
+    ${YELLOW}javac Hello*.java${NC}
+
+${CYAN}${BOLD}[BUOC 4] Kiem thu cay cu phap bang TestRig (grun)${NC}
+  Cu phap: ${BOLD}grun <TenGrammar> <TenLuatBatDau> [TuyChon]${NC}
+
+  1. Xem danh sach Token:
+     ${YELLOW}grun Hello r -tokens${NC}
+     - Sau do go: ${GREEN}hello world${NC}
+     - Nhan ${BOLD}Enter${NC}, sau do nhan ${BOLD}Ctrl + D${NC} de ket thuc input.
+
+  2. Xem cay cu phap dang chu (LISP style):
+     ${YELLOW}grun Hello r -tree${NC}
+
+  3. Hien thi cay cu phap truc quan (Cua so do hoa GUI):
+     ${YELLOW}grun Hello r -gui${NC}
+     (Cua so truc quan se hien ra bieu dien cay Parse Tree tuyet dep!)
+
+------------------------------------------------------------------
+${BOLD}CAC CO THUONG DUNG VOI ANTLR4:${NC}
+  ${GREEN}-visitor${NC}       Tu dong sinh ra Visitor interface (dung cho AST walk)
+  ${GREEN}-no-listener${NC}   Khong sinh Listener (mac dinh ANTLR co sinh)
+  ${GREEN}-package <ten>${NC}  Chi dinh Java package cho cac file sinh ra
+  ${GREEN}-helpantlr${NC}     Hien thi lai bang huong dan nay
+
+${PURPLE}#toolbyphichxivnuk -- ANTLR CLI: Easier to use!${NC}"
