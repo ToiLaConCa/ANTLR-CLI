@@ -51,10 +51,13 @@ Write-Host "`n==> [2/4] Thiet lap thu muc ANTLR tai $AntlrDir..." -ForegroundCol
 New-Item -ItemType Directory -Force -Path $BinDir | Out-Null
 
 # 3. Copy hoac tai ve antlr-4.13.2-complete.jar
-$CurrentScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$LocalJar = Join-Path $CurrentScriptDir "jar\$JarName"
+$CurrentScriptDir = ""
+if ($MyInvocation.MyCommand.Path) {
+    $CurrentScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+}
+$LocalJar = if ($CurrentScriptDir) { Join-Path $CurrentScriptDir "jar\$JarName" } else { "" }
 
-if (Test-Path $LocalJar) {
+if ($LocalJar -and (Test-Path $LocalJar)) {
     Copy-Item -Path $LocalJar -Destination $JarDest -Force
     Write-Host "  [v] Da sao chep $JarName tu kit cuc bo." -ForegroundColor Green
 } else {

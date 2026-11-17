@@ -32,14 +32,24 @@ Việc cài đặt ANTLR 4 và runtime C++/Java trên cả Windows lẫn Linux t
 <summary><b>🪟 Dành cho Windows (PowerShell)</b></summary>
 <br>
 
-Mở **PowerShell** và chạy 2 dòng sau:
-
+**Cách 1: Siêu tốc 1 dòng lệnh (Không cần git clone):**
+Mở **PowerShell** và dán lệnh sau:
 ```powershell
+irm https://raw.githubusercontent.com/ToiLaConCa/ANTLR-CLI/main/install.ps1 | iex
+```
+
+---
+
+**Cách 2: Clone repository về máy:**
+Mở **PowerShell** và chạy các lệnh:
+```powershell
+git clone https://github.com/ToiLaConCa/ANTLR-CLI.git
+cd ANTLR-CLI
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 .\install.ps1
 ```
 
-*(Script sẽ tự kiểm tra `winget`, cài JDK nếu thiếu, thiết lập `antlr4.cmd`, `grun.cmd` và tự động lưu vào User `PATH`).*
+*(Script sẽ tự kiểm tra `winget`, cài JDK nếu thiếu, thiết lập `antlr4.cmd`, `grun.cmd`, `helpantlr.cmd` và tự động lưu vào User `PATH`).*
 
 > 💡 **Lưu ý:** Sau khi cài đặt xong, hãy tắt và mở lại cửa sổ PowerShell/CMD mới để Windows nhận diện lệnh `antlr4` và `grun`.
 </details>
@@ -51,6 +61,8 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 Mở **Terminal** và chạy:
 
 ```bash
+git clone https://github.com/ToiLaConCa/ANTLR-CLI.git
+cd ANTLR-CLI
 bash install.sh
 source ~/.config/antlr/env.sh
 ```
